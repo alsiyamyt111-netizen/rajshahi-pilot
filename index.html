@@ -780,13 +780,16 @@ function posterMats(){if(POSTER_MATS)return POSTER_MATS;
     return new THREE.MeshLambertMaterial({map:tex(c),side:THREE.DoubleSide})});
   return POSTER_MATS}
 function elevRoad(g,pillars){var deck=mat(0xf4f2ec),sk=mat(0xe6e2d6),pil=mat(0x8f8f96),pm=posterMats(),side,k,z,pidx;
+  /* deck over the two middle lanes only; the outer lanes and the sky above them stay open */
+  bx(g,9.4,.5,L,deck,0,12.5,-L/2);
   for(side=-1;side<=1;side+=2){
-    bx(g,3.8,.5,L,deck,side*7.1,6.8,-L/2);
-    bx(g,.15,1.1,L,sk,side*5.2,6.25,-L/2);
+    bx(g,.15,.7,L,sk,side*4.5,11.9,-L/2);
     for(k=0;k<2;k++){z=-7.5-k*15;pidx=(Math.round(-z/15)+(side>0?1:0))%pm.length;
-      mk(g,PLANE,pm[pidx],side*5.1,6.25,z,4.4,1.0,1,-side*Math.PI/2);}
+      mk(g,PLANE,pm[pidx],side*4.6,11.9,z,4.4,.7,1,side*Math.PI/2);   /* poster facing the outer lane */
+      mk(g,PLANE,pm[(pidx+1)%pm.length],side*4.4,11.9,z,4.4,.7,1,-side*Math.PI/2); /* poster facing the middle */
+    }
   }
-  if(pillars){[-7.5,-22.5].forEach(function(z){bx(g,.4,6.8,.4,pil,-5.5,3.4,z);bx(g,.4,6.8,.4,pil,5.5,3.4,z)});}
+  if(pillars){[-7.5,-22.5].forEach(function(z){bx(g,.4,12.25,.4,pil,0,6.125,z)});}
 }
 function ovrSeg(i){var c=i*L+L/2,m=((c%LOOP)+LOOP)%LOOP;return m>=560&&m<4200}
 function cityExtras(g,i){
