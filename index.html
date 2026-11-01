@@ -769,7 +769,7 @@ function billboard(g,sg,zc,idx){
 }
 function elevRoad(g,pillars){var asp=mat(0x3a3a42),rail=mat(0xd9d2c0),pil=mat(0x8f8f96);
   bx(g,18.8,.5,L,asp,0,6.8,-L/2);bx(g,.3,.8,L,rail,-9.25,7.25,-L/2);bx(g,.3,.8,L,rail,9.25,7.25,-L/2);
-  if(pillars){[-14.5,-29].forEach(function(z){bx(g,.9,6.8,.9,pil,-9.4,3.4,z);bx(g,.9,6.8,.9,pil,9.4,3.4,z)});}
+  if(pillars){[-7.5,-22.5].forEach(function(z){bx(g,.5,6.8,.5,pil,0,3.4,z)});}
 }
 function ovrSeg(i){var c=i*L+L/2,m=((c%LOOP)+LOOP)%LOOP;return m>=560&&m<4200}
 function cityExtras(g,i){
