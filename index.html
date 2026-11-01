@@ -196,7 +196,7 @@ h1 span{color:var(--gold)}
 <div id="intro" class="ui panel on"><div class="col"><div class="eyebrow">খেলার নিয়ম · সংস্করণ ৪</div><h1>রাজশাহীর <span>পাইলট</span></h1>
 <p style="color:#ffd58a;font-weight:700;margin:4px 0 12px">মামুর বেটা খেলার নিয়ম দেখে শুরু কর!</p>
 <p style="margin:0 0 10px;font-size:13px"><a href="privacy.html" target="_blank" style="color:#ffd58a">গোপনীয়তা নীতি · Privacy Policy</a></p>
-<ul class="rules"><li>⬅️➡️ লেন বদল (সোয়াইপ/বাটন) · চৌমাথায় ডিভাইডার খোলা, বাঁক নেওয়া যায়</li><li>🅱️ ব্রেক · গ্যাসে একবার ট্যাপ = অটো ড্রাইভ, ডাবল ট্যাপ বা ব্রেকে বন্ধ</li><li>📯 হর্ন বাটন (কিবোর্ডে H), মাঝে মাঝে ফানি হর্ন</li><li>🚗 পাশ থেকে ধাক্কা দিলে অন্য গাড়ি উল্টে যায়, কিন্তু আপনার কিছু হয় না</li><li>😡 সরাসরি ধাক্কা দিলে গাড়ি আটকে জনতা পেটাবে — গেম ওভার!</li><li>🚶 পথচারীকে ধাক্কা দিলে গালি শুনবেন</li><li>🪙 কয়েন কুড়িয়ে ও ভাড়া খেটে নতুন গাড়ি আনলক করুন</li><li>🌫️ প্রতি ৩০ মিনিটে আবহাওয়া বদলায় — কুয়াশা ও বরফে সাবধান</li></ul>
+<ul class="rules"><li>⬅️➡️ লেন বদল (সোয়াইপ/বাটন) · চৌমাথায় ডিভাইডার খোলা, বাঁক নেওয়া যায়</li><li>△ গ্যাস · একবার ট্যাপ = অটো ড্রাইভ চালু, ডাবল ট্যাপে বন্ধ। চেপে ধরলে আরও জোরে চলে</li><li>▽ রিভার্স · চেপে ধরলে গাড়ি থেমে সামনে মুখ রেখেই পেছনে যায়, ছাড়লে আবার সামনে (কিবোর্ডে ↓ / S)</li><li>📯 হর্ন বাটন (কিবোর্ডে H), মাঝে মাঝে ফানি হর্ন</li><li>🚗 পাশ থেকে ধাক্কা দিলে অন্য গাড়ি উল্টে যায়, কিন্তু আপনার কিছু হয় না</li><li>😡 সরাসরি ধাক্কা দিলে গাড়ি আটকে জনতা পেটাবে — গেম ওভার!</li><li>🚶 পথচারীকে ধাক্কা দিলে গালি শুনবেন</li><li>🪙 কয়েন কুড়িয়ে ও ভাড়া খেটে নতুন গাড়ি আনলক করুন</li><li>🌫️ প্রতি ৩০ মিনিটে আবহাওয়া বদলায় — কুয়াশা ও বরফে সাবধান</li></ul>
 <button class="btn" id="bPlay">খেলুন</button></div></div>
 <div id="menu" class="ui panel nolog">
     <div class="col">
@@ -707,11 +707,21 @@ function boat(p,x,z,r){
 /* ---------- chunk (street segment) ---------- */
 var chunks=[],walkers=[];
 function isJ(i){var m=(i*L)%LOOP;return i%14===7&&!(m>=1800&&m<=1980)&&!(m>=3500&&m<=3640)}
+function medianFlowers(p){
+  var leaf=mat(0x3f8f4a),leaf2=mat(0x2f7a3c),cols=[0xe63946,0xf7b6d2,0xffb703,0xffffff,0xff7aa8,0xff8c42,0xc77dff].map(function(c){return mat(c)}),n=Math.round(L/1.5),k,j,rw,x,z,a,t;
+  for(rw=0;rw<2;rw++){
+    x=rw?.62:-.62;
+    for(k=0;k<n;k++){
+      z=-(k+.5)*(L/n);t=k+rw*3;
+      sp(p,.4,.46,.4,(k+rw)%2?leaf:leaf2,x,.62,z);
+      for(j=0;j<4;j++){a=t*2.4+j*1.7;sp(p,.14,.14,.14,cols[(t+j)%cols.length],x+Math.cos(a)*.3,.82+(j%2)*.14,z+Math.sin(a)*.3);}
+    }
+  }
+}
 function addDual(g,J,i){
-  if(i%14===3&&ovrSeg(i)){var fm=mat(0x6a6a72);bx(g,30,.3,2.4,fm,0,5.6,-8);bx(g,30,.5,.12,fm,0,5.95,-9.1);bx(g,30,.5,.12,fm,0,5.95,-6.9);bx(g,1,5.6,1,fm,-9,2.8,-8);bx(g,1,5.6,1,fm,9,2.8,-8);}
+  if(i%14===3){var fm=mat(0x6a6a72);bx(g,30,.3,2.4,fm,0,5.6,-8);bx(g,30,.5,.12,fm,0,5.95,-9.1);bx(g,30,.5,.12,fm,0,5.95,-6.9);bx(g,1,5.6,1,fm,-9,2.8,-8);bx(g,1,5.6,1,fm,9,2.8,-8);}
   var cm=mat(0xb8b8b0),dk=mat(0x8a8a90),wh=mat(0xf4f0e0),k;
-  bx(g,7,1,L,dk,0,7.2,-L/2);bx(g,.4,1.1,L,cm,-3.3,8.25,-L/2);bx(g,.4,1.1,L,cm,3.3,8.25,-L/2);
-  if(!J){bx(g,2.8,.34,L,cm,0,.17,-L/2);bx(g,2.2,.37,L,mat(0x6b7f4a),0,.18,-L/2);bx(g,1.5,7,1.5,cm,0,3.5,-L/2);}
+  if(!J){bx(g,2.8,.34,L,cm,0,.17,-L/2);bx(g,2.2,.37,L,mat(0x6b7f4a),0,.18,-L/2);medianFlowers(g);}
   else{[-1,1].forEach(function(sg){bx(g,52,.28,12,mat(0x3d3b40),sg*35.1,.14,-15).userData.ns=1;bx(g,52,.29,.3,wh,sg*35.1,.14,-15).userData.ns=1;});
     for(k=0;k<8;k++)bx(g,.9,.03,3,wh,-8.4+k*2.4,.02,-5);}
 }
@@ -995,7 +1005,7 @@ function buildChunk(i){
     // lamps
     if(ovrSeg(i)){lamp(g,sg*6.4,-7);lamp(g,sg*6.4,-22);}
   }
-  if(!isJ(i)&&!ovrSeg(i)){flowerBed(g,-L*.5);chandelier(g,-L*.5);}
+  if(!isJ(i)&&!ovrSeg(i)){chandelier(g,-L*.5);}
   if(zn.id===1&&r()<.4)bunting(g,-15,r);
   if(zn.id===4)for(j=0;j<4;j++){var lp=new THREE.Mesh(FLAT,LIGHT_PATCH);lp.scale.set(2+r()*3,1,3+r()*5);lp.position.set((r()-.5)*9,.205,-r()*L);lp.renderOrder=3;g.add(lp);}
   // walkers in street zones
@@ -1483,7 +1493,7 @@ function hitCar(v,dx){if(dx<1.0||(v.lane>=2&&dx<1.3))directHit(v);else sideHit(v
 function horn(){if(VOX.horn){hornPlay(1);return}if(Math.random()<.35)sfx('funny'+Math.floor(Math.random()*3));else sfx('honk',1)}
 function jAt(){var i=Math.floor(G.dist/L);return isJ(i)?i*L:-1}
 function doTurn(d){
-  G.lane=d<0?0:1;G.turnT=.9;G.turnDir=d;G.lastTurn=G.dist;G.speed*=.8;G.bonus+=60;
+  G.lane=d<0?0:1;G.turnT=1.4;G.turnDir=d;G.lastTurn=G.dist;G.speed*=.8;G.bonus+=60;
   var f=$('flash');f.style.background='#111';f.style.transition='none';f.style.opacity=.5;requestAnimationFrame(function(){f.style.transition='opacity .7s';f.style.opacity=0;setTimeout(function(){f.style.background=''},800)});
   toast('বাঁক! +'+bn(60));sfx('zone');
 }
@@ -1492,7 +1502,7 @@ function toggleGear(){return;if(G.mode!=='play'||G.crowd>0)return;G.gear=G.gear<
 function useMango(auto){if(!G.mangoes||G.mode!=='play')return false;G.mangoes--;G.nitro=Math.max(G.nitro,3.2);G.bonus+=auto?100:0;sfx('mango');return true}
 function mangoFly(){if(!G.mangoes||G.mode!=='play')return false;var pd=protest&&!protest.gone?protest.s-G.dist:null;if(pd===null||pd>60||pd<-6)return useMango(0);G.mangoes--;G.air=1.6;G.speed=Math.max(G.speed,20);G.nitro=Math.max(G.nitro,3.2);G.bonus+=100;sfx('mango');toast('🥭 আমের বুস্টে উড়ে পার!');return true}
 function holdSteer(d){G.hold=d;G.holdT=0;G.uDone=0;steer(d)}
-function steer(d){d=d*(G.gear<0?-1:1);
+function steer(d){
   if(G.mode==='over'||G.crowd>0)return;
   var nl=G.lane+d,s0=jAt();
   if(nl<0||nl>3){if(G.mode==='play'&&s0>=0&&G.dist>s0+4&&G.dist<s0+24&&G.dist-G.lastTurn>2)doTurn(d);return}
@@ -1673,7 +1683,7 @@ function spawnProtestOld(){
   fg.position.set(0,0,G.dist-s);scene.add(fg);
   var rg=new THREE.Group();bx(rg,2.8,.16,5.4,mat(0x8a5a2a),0,.5,0,0,.2);bx(rg,2.6,.5,.2,mat(0x5a3a1a),0,.25,2.5);wheel(rg,.35,.2,-1.4,.35,2);wheel(rg,.35,.2,1.4,.35,2);
   mergeGroup(rg);rg.position.set(LANES[1],0,G.dist-(s-16));scene.add(rg);
-  protest={s:s,rs:s-16,cg:cg,rg:rg,fg:fg,life:1e9};lastPro=s;toast('সামনে আন্দোলন! ব্রেক করুন বা র‍্যাম্পে জোরে উঠুন',true);
+  protest={s:s,rs:s-16,cg:cg,rg:rg,fg:fg,life:1e9};lastPro=s;toast('সামনে আন্দোলন! ▽ চেপে পিছনে যান বা র‍্যাম্পে জোরে উঠুন',true);
 }
 function spawnProtest(){
   var s=G.dist+190,jn=Math.floor(s/L);if(isJ(jn-1)||isJ(jn)||isJ(jn+1)||isJ(jn+2))return;
@@ -1691,7 +1701,7 @@ function spawnProtest(){
   var rg=new THREE.Group();bx(rg,2.8,.16,5.4,mat(0x8a5a2a),0,.5,0,0,.2);bx(rg,2.6,.5,.2,mat(0x5a3a1a),0,.25,2.5);wheel(rg,.35,.2,-1.4,.35,2);wheel(rg,.35,.2,1.4,.35,2);
   bx(rg,1.7,.7,2.2,mat(0x9a6b3a),-2.3,.8,-1.2);wheel(rg,.35,.2,-2.9,.35,-2.4);wheel(rg,.35,.2,-1.7,.35,-2.4);bx(rg,.1,.1,2.6,mat(0x5a3a1a),-2.3,1.3,-.8);
   mergeGroup(rg);rg.position.set(LANES[0],0,G.dist-(s-16));scene.add(rg);
-  protest={s:s,rs:s-16,cg:cg,rg:rg,fg:fg,life:1e9};lastPro=s;toast('সামনে আন্দোলন! বাঁ পাশের ঠেলাগাড়ির র‍্যাম্পে জোরে উঠে পার হন, নয়তো ব্রেক করুন',true);
+  protest={s:s,rs:s-16,cg:cg,rg:rg,fg:fg,life:1e9};lastPro=s;toast('সামনে আন্দোলন! বাঁ পাশের ঠেলাগাড়ির র‍্যাম্পে জোরে উঠে পার হন, নয়তো ▽ চেপে পিছনে যান',true);
 }
 /* ---------- map ---------- */
 var LOCS=[{n:'আমচত্বর',s:40},{n:'রেলগেট',s:600},{n:'সাহেব বাজার',s:1300},{n:'রাজশাহী কলেজ',s:1780},{n:'পদ্মাপাড়',s:2540},{n:'রাজশাহী বিশ্ববিদ্যালয়',s:3540}];
@@ -1821,13 +1831,13 @@ var W=WX[G.wx],fg=scene.fog,wk=Math.min(1,dt*.4);fg.near+=(W.fn-fg.near)*wk;fg.f
   }
   // player
   if(G.hold&&play){G.holdT+=dt;if(G.holdT>.6&&!G.uDone){G.uDone=1;toggleGear()}}
-  var tw=G.turnT>0?Math.sin((1-G.turnT/.9)*Math.PI):0;if(G.turnT>0)G.turnT-=dt;
+  var tw=G.turnT>0?Math.sin((1-G.turnT/1.4)*Math.PI):0;if(G.turnT>0)G.turnT-=dt;
   if(G.air>0){G.air-=dt;var au=1-G.air/1.5;G.airY=Math.max(0,12*au*(1-au))}else G.airY=0;
   var tx=LANES[G.lane],dxT=tx-G.x,stp=(2.2+vh.steer*.14)*dt*(G.ice?.4:1);G.x+=Math.abs(dxT)<=stp?dxT:(dxT>0?stp:-stp);
   var dxs=tx-G.x,drift=zn.id===3&&G.mode==='play'?1.7:1;
-  G.face=(G.face||0)+((G.gear<0?Math.PI:0)-(G.face||0))*Math.min(1,dt*3.2);
+  G.face=0;
   player.root.position.set(G.x,G.airY,0);
-  player.root.rotation.y=-dxs*.12*drift-G.turnDir*tw*.45+(G.face||0);player.root.rotation.z=dxs*.05*drift;
+  player.root.rotation.y=-dxs*.2*drift-G.turnDir*tw*1.15+(G.face||0);player.root.rotation.z=dxs*.09*drift+G.turnDir*tw*.1;
   player.model.position.y=Math.sin(G.t*28)*.012*(G.speed/30);
   player.root.visible=!(G.inv>0&&Math.floor(G.t*14)%2===0);
   if(player.flame){var on=G.nitro>0;player.flame.visible=on;if(on){var fs=1.4+Math.random()*.9;player.flame.scale.set(.32,fs,.32);player.flame.position.z=vh.len/2+fs*.45;}}
@@ -1838,7 +1848,7 @@ var W=WX[G.wx],fg=scene.fog,wk=Math.min(1,dt*.4);fg.near+=(W.fn-fg.near)*wk;fg.f
   var sh=G.shake>0?G.shake:0;G.shake=Math.max(0,G.shake-dt*1.6);
   var cR=portrait?14:10.5,fa=G.face||0;
   camera.position.set(G.x*.55+cR*Math.sin(fa)*.9+(Math.random()-.5)*sh*.9,4.9+(Math.random()-.5)*sh*.6,cR*Math.cos(fa));
-  camera.lookAt(G.x*.3+G.turnDir*tw*20,1.7,(-22+tw*8)*Math.cos(fa));camera.rotateZ(-G.turnDir*tw*.1);
+  camera.lookAt(G.x*.3+G.turnDir*tw*34,1.7,(-22+tw*14)*Math.cos(fa));camera.rotateZ(-G.turnDir*tw*.16);
   // dust
   var pa=dustPts.geometry.attributes.position,arr=pa.array;
   for(i=0;i<arr.length;i+=3){arr[i+2]+=G.gear*G.speed*dt*.9;arr[i]+=Math.sin(G.t+i)*.004;if(arr[i+2]>14){arr[i+2]-=84;arr[i]=camera.position.x+(Math.random()-.5)*30;arr[i+1]=.4+Math.random()*8}else if(arr[i+2]<-70){arr[i+2]+=84;arr[i]=camera.position.x+(Math.random()-.5)*30;arr[i+1]=.4+Math.random()*8}}
