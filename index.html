@@ -767,9 +767,26 @@ function billboard(g,sg,zc,idx){
   bx(g,.14,6,.14,mat(0x444444),sg*10.2,3,zc);
   mk(g,PLANE,bbMat(idx),sg*10.0,5.7,zc+.1,3.6,1.8,1,-sg*.5);
 }
-function elevRoad(g,pillars){var asp=mat(0x3a3a42),rail=mat(0xd9d2c0),pil=mat(0x8f8f96);
-  bx(g,18.8,.5,L,asp,0,6.8,-L/2);bx(g,.3,.8,L,rail,-9.25,7.25,-L/2);bx(g,.3,.8,L,rail,9.25,7.25,-L/2);
-  if(pillars){[-7.5,-22.5].forEach(function(z){bx(g,.5,6.8,.5,pil,0,3.4,z)});}
+var POSTER_MATS=null;
+function posterMats(){if(POSTER_MATS)return POSTER_MATS;
+  var T=[['রাজশাহীর পাইলট','গেম ডেভেলপার: MD Alamin Islam Siyam'],['আম খাও, গাড়ি চালাও!'],['মামুর বেটা, হর্ন বাজাও'],['ধীরে চালাও, পথ দেখো'],['রাজশাহী — আমের রাজধানী'],['ব্রেক ফেল? রিভার্স আছে!'],['পথচারী আগে, গাড়ি পরে']],
+      C=['#e63946','#f4a261','#2a9d8f','#264653','#e9c46a','#8338ec','#ff006e'];
+  POSTER_MATS=T.map(function(lines,n){var o=cv(440,100),c=o[0],x=o[1];
+    x.fillStyle=C[n%C.length];x.fillRect(0,0,440,100);
+    x.strokeStyle='#fff3d0';x.lineWidth=6;x.strokeRect(5,5,430,90);
+    x.fillStyle='#fff8e6';x.textAlign='center';x.textBaseline='middle';
+    if(lines.length>1){x.font="bold 30px 'Hind Siliguri',sans-serif";x.fillText(lines[0],220,36);x.font="bold 20px 'Hind Siliguri',sans-serif";x.fillText(lines[1],220,72)}
+    else{x.font="bold 36px 'Hind Siliguri',sans-serif";x.fillText(lines[0],220,50)}
+    return new THREE.MeshLambertMaterial({map:tex(c),side:THREE.DoubleSide})});
+  return POSTER_MATS}
+function elevRoad(g,pillars){var deck=mat(0xf4f2ec),sk=mat(0xe6e2d6),pil=mat(0x8f8f96),pm=posterMats(),side,k,z,pidx;
+  for(side=-1;side<=1;side+=2){
+    bx(g,3.8,.5,L,deck,side*7.1,6.8,-L/2);
+    bx(g,.15,1.1,L,sk,side*5.2,6.25,-L/2);
+    for(k=0;k<2;k++){z=-7.5-k*15;pidx=(Math.round(-z/15)+(side>0?1:0))%pm.length;
+      mk(g,PLANE,pm[pidx],side*5.1,6.25,z,4.4,1.0,1,-side*Math.PI/2);}
+  }
+  if(pillars){[-7.5,-22.5].forEach(function(z){bx(g,.4,6.8,.4,pil,-5.5,3.4,z);bx(g,.4,6.8,.4,pil,5.5,3.4,z)});}
 }
 function ovrSeg(i){var c=i*L+L/2,m=((c%LOOP)+LOOP)%LOOP;return m>=560&&m<4200}
 function cityExtras(g,i){
