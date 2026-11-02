@@ -1629,6 +1629,8 @@ $('bLB').addEventListener('click',async function(){
 var FIRE1=new THREE.MeshBasicMaterial({color:0xff6a00}),FIRE2=new THREE.MeshBasicMaterial({color:0xffd23a}),SLOG=['দাবি মানতে হবে, মানতে হবে!','এই মুহূর্তে বিচার চাই!','আমাদের দাবি মানতে হবে!'];
 function chant(v){if(!AU.ctx||!AU.on)return;var b=.04+.1*v;[0,.28,.56].forEach(function(d,i){tone(150+i*25+Math.random()*20,d,.2,'sawtooth',b,130+i*20);tone(300+i*40,d,.18,'square',b*.4)})}
 var SIDEX=11.2,pedT=0,station=null,lastSt=300,PUMP_PRICE=150000;
+$('fuel').style.cssText='position:fixed;left:10px;top:262px;width:150px;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,241,214,.3);background:rgba(42,22,10,.7);color:#fff1d6;font:700 13px var(--body);z-index:6;pointer-events:none';
+var stEl=document.createElement('div');stEl.style.cssText='position:fixed;left:10px;top:300px;padding:4px 10px;border-radius:10px;background:rgba(42,22,10,.7);color:#fff1d6;font:700 13px var(--body);z-index:6;display:none;pointer-events:none';(document.body||document.documentElement).appendChild(stEl);
 function spawnStation(){
   var s=G.dist+170,jn=Math.floor(s/L);if(isJ(jn-1)||isJ(jn)||isJ(jn+1))return;
   var g=new THREE.Group(),sm=signMat('চার্জ / পাম্প','#c1121f','#fff4d6',4);
@@ -1837,11 +1839,11 @@ var W=WX[G.wx],fg=scene.fog,wk=Math.min(1,dt*.4);fg.near+=(W.fn-fg.near)*wk;fg.f
   }else if(play&&zoneAt(G.dist+190).id===4&&G.dist>lastPro+400&&Math.random()<dt*.6)spawnProtest();
   if(trip&&G.dist>=trip.to){var fr=trip.fare;toast('পৌঁছে গেছেন: '+LOCS[trip.b].n+' · ভাড়া '+bn(fr)+' কয়েন');G.bonus+=fr;if(U){U.rec.d.money+=fr;saveU()}trip=null;sfx('zone')}
   if(play&&G.crowd<=0){G.fuel=Math.max(0,G.fuel-dt*(.35+G.speed/45)*(G.veh==='rick'?1:.75));if(G.fuel<=0&&!G.fz){G.fz=1;toast('চার্জ/ফুয়েল শেষ! স্টেশনে যান',true)}if(G.fuel>5)G.fz=0}
-  if(station){var srl=station.s-G.dist;station.g.position.z=-srl;
+  if(station){var srl=station.s-G.dist;station.g.position.z=-srl;stEl.style.display=play?'block':'none';stEl.textContent='⚡ চার্জ/পাম্প: '+(srl>0?bn(Math.round(srl))+' মিটার সামনে — বাঁ লেনে থামুন':'এখানে — বাঁ লেনে থামুন');
     if(play&&G.speed<3&&Math.abs(srl)<8&&G.lane===0&&G.fuel<100){G.fillT-=dt;if(G.fillT<=0){G.fillT=1;if(payFill()){G.fuel=Math.min(100,G.fuel+25);toast(U&&U.rec.d.pump?'⚡ ফ্রি রিফিল (আপনার পাম্প)':'⚡ রিফিল −৩ কয়েন')}else toast('কয়েন নেই!',true)}}
     if(srl<-40){scene.remove(station.g);station=null}
-  }else if(play&&G.dist>lastSt+600&&Math.random()<dt*.6)spawnStation();
-  if(play){var fe=$('fuelI');fe.style.width=G.fuel+'%';fe.style.background=G.fuel<20?'#e63946':'#3ddc84';$('fuelT').textContent=(G.veh==='rick'?'⚡ চার্জ ':'⛽ ফুয়েল ')+Math.round(G.fuel)+'%'}
+  }else{stEl.style.display='none';if(play&&G.dist>lastSt+300&&Math.random()<dt*.6)spawnStation();}
+  $('fuel').style.display=play?'block':'none';if(play){var fe=$('fuelI');fe.style.width=G.fuel+'%';fe.style.background=G.fuel<20?'#e63946':'#3ddc84';$('fuelT').textContent=(G.veh==='rick'?'⚡ চার্জ ':'⛽ ফুয়েল ')+Math.round(G.fuel)+'%'}
   // pickups
   for(i=pickups.length-1;i>=0;i--){
     var p=pickups[i],r2=p.s-G.dist;p.g.position.z=-r2;
