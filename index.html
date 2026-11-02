@@ -234,7 +234,7 @@ h1 span{color:var(--gold)}
       <div id="lbBox" style="display:none;padding:10px 12px;border-radius:12px;background:rgba(42,26,16,.55);border:1px solid rgba(255,241,214,.2)">
         <ol id="lbList" style="margin:0;padding-left:20px;color:var(--paper-dim);font-size:14px;line-height:1.6"></ol>
       </div>
-      <button class="btn" id="bStart">খেলা শুরু</button>
+      <div class="row"><button class="btn" id="bStart">খেলা শুরু</button><button class="btn" id="bCust" style="background:linear-gradient(180deg,#ffe066,#f5c400);color:#3a1a05;min-width:0">বাটন কাস্টমাইজ করুন</button></div>
       <ul class="tips">
         <li><svg viewBox="0 0 24 24" fill="none" stroke="#ffd9a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg>লেন বদলাতে ← → বা সোয়াইপ</li>
         <li><svg viewBox="0 0 24 24"><ellipse cx="12" cy="13" rx="7" ry="8" fill="#f2a22b"/><path d="M12 5c1-3 4-3 6-2-1 3-4 4-6 2z" fill="#3a8a4c"/></svg>আম কুড়ালে নাইট্রো</li>
@@ -1802,14 +1802,42 @@ setP.innerHTML='<div style="background:#2a1a10;color:#fff1d6;border:1px solid rg
   '<button id="stClose" class="btn" style="min-width:0">বন্ধ করুন</button></div>';
 (document.body||document.documentElement).appendChild(setP);
 var stEdit=setP.querySelector('#stEdit'),setWasP=false;
-function openSettings(){setWasP=G.paused;if(G.mode==='play')G.paused=true;setP.style.display='flex'}
-function closeSettings(){if(layEdit)setEdit(false);stEdit.textContent='বাটন সাজান';setP.style.display='none';G.paused=setWasP&&G.mode==='play'}
+function openSettings(){setWasP=G.paused;if(G.mode==='play')G.paused=true;setP.menuOn=$('menu').classList.contains('on');if(setP.menuOn)$('menu').classList.remove('on');setP.hudTemp=G.mode!=='play';if(setP.hudTemp)$('hud').classList.add('on');setP.style.display='flex'}
+function closeSettings(){if(layEdit)setEdit(false);stEdit.textContent='বাটন সাজান';setP.style.display='none';G.paused=setWasP&&G.mode==='play';if(setP.hudTemp){$('hud').classList.remove('on');setP.hudTemp=false}if(setP.menuOn){$('menu').classList.add('on');setP.menuOn=false}}
 stEdit.addEventListener('click',function(){if(!layEdit){setEdit(true);stEdit.textContent='সম্পন্ন'}else{closeSettings()}});
 setP.querySelector('#stReset').addEventListener('click',function(){localStorage.removeItem('rcdl_layout');applyLayout();if(layEdit)syncOv()});
 setP.querySelector('#stClose').addEventListener('click',closeSettings);
-$('bSet').addEventListener('click',openSettings);
+$('bSet').style.display='none';
 applyLayout();
 addEventListener('resize',syncOv);
+
+/* ---------- pause panel, customise flow, 3-second resume ---------- */
+var pausePanel=document.createElement('div'),custBar=document.createElement('div'),cdEl=document.createElement('div'),custFrom=null,cdT=null,cdRun=false;
+pausePanel.style.cssText='position:fixed;inset:0;z-index:25;display:none;align-items:center;justify-content:center;background:rgba(20,10,4,.6)';
+pausePanel.innerHTML='<div style="background:#2a1a10;color:#fff1d6;border:1px solid rgba(255,241,214,.3);border-radius:16px;padding:18px 20px;width:min(320px,90vw);font:15px var(--body);display:grid;gap:10px">'+
+  '<div style="font:800 22px var(--display)">বিরতি</div>'+
+  '<button id="pResume" class="btn" style="min-width:0">চালিয়ে যান</button>'+
+  '<button id="pCust" class="btn" style="min-width:0;background:linear-gradient(180deg,#ffe066,#f5c400);color:#3a1a05">বাটন কাস্টমাইজ করুন</button></div>';
+custBar.style.cssText='position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:27;display:none;align-items:center;gap:12px;background:#2a1a10;color:#fff1d6;border:1px solid #f5c400;border-radius:14px;padding:8px 14px;font:700 15px var(--body)';
+custBar.innerHTML='<span>বাটন টেনে সাজান</span><button id="custDone" class="btn" style="min-width:0;padding:6px 16px;font-size:16px">সম্পন্ন</button>';
+cdEl.style.cssText='position:fixed;inset:0;z-index:26;display:none;align-items:center;justify-content:center;font:800 96px var(--display);color:#ffd27a;text-shadow:0 4px 0 #7a3a0a;pointer-events:none;background:rgba(20,10,4,.25)';
+var BODY_EL=document.body||document.documentElement;
+BODY_EL.appendChild(pausePanel);BODY_EL.appendChild(custBar);BODY_EL.appendChild(cdEl);
+function pauseUI(){var show=G.paused&&G.mode==='play'&&!cdRun&&!custFrom&&!$('map').classList.contains('on');
+  pausePanel.style.display=show?'flex':'none';$('bPause').innerHTML=G.paused?IC_PLAY:IC_PAUSE}
+/* three seconds, then the game carries on */
+function continueGame(){cdRun=true;pauseUI();cdEl.style.display='flex';var n=3;cdEl.textContent=n;clearInterval(cdT);
+  cdT=setInterval(function(){n--;if(n>0){cdEl.textContent=n}else{clearInterval(cdT);cdEl.style.display='none';cdRun=false;G.paused=false;pauseUI()}},1000)}
+function startCustomize(from){custFrom=from;pausePanel.style.display='none';
+  if(from==='menu'){$('menu').classList.remove('on');$('hud').classList.add('on')}
+  custBar.style.display='flex';setEdit(true)}
+function endCustomize(){setEdit(false);saveLayout();custBar.style.display='none';var f=custFrom;custFrom=null;
+  if(f==='menu'){$('hud').classList.remove('on');$('menu').classList.add('on')}
+  else if(f==='pause'){continueGame()}}
+pausePanel.querySelector('#pResume').addEventListener('click',function(){G.paused=false;pauseUI()});
+pausePanel.querySelector('#pCust').addEventListener('click',function(){startCustomize('pause')});
+custBar.querySelector('#custDone').addEventListener('click',endCustomize);
+$('bCust').addEventListener('click',function(){startCustomize('menu')});
 /* ---------- main loop ---------- */
 var clock=new THREE.Clock(),dustPts=null,sunSprite=null;
 (function(){
@@ -1985,7 +2013,7 @@ $('bMenu').addEventListener('click',function(){stopNews();refreshAcct();$('over'
 $('bMute').addEventListener('click',setMute);
 var IC_PAUSE='<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1.600" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.600" fill="currentColor"/></svg>',IC_PLAY='<svg viewBox="0 0 24 24"><path d="M8 5.500v13l11-6.500z" fill="currentColor" stroke="currentColor" stroke-width="1.600" stroke-linejoin="round"/></svg>';
 $('bPause').innerHTML=IC_PAUSE;
-function togglePause(){if(G.mode!=='play')return;G.paused=!G.paused;$('bPause').innerHTML=G.paused?IC_PLAY:IC_PAUSE;}
+function togglePause(){if(G.mode!=='play'||cdRun)return;G.paused=!G.paused;pauseUI()}
 $('bPause').addEventListener('click',togglePause);$('bGear').addEventListener('click',toggleGear);$('bMango').addEventListener('click',function(){if(!mangoFly())toast('আম নেই!',true)});
 document.addEventListener('visibilitychange',function(){if(document.hidden&&G.mode==='play'&&!G.paused)togglePause();if(!document.hidden)resize()});
 KEYS.forEach(function(k){
