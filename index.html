@@ -1783,9 +1783,9 @@ var layEdit=false,layOv={};
 function syncOv(){var sr=stage.getBoundingClientRect();LAYOUT_KEYS.forEach(function(k){var ov=layOv[k];if(!ov)return;var r=$(k).getBoundingClientRect();ov.style.left=(r.left-sr.left)+'px';ov.style.top=(r.top-sr.top)+'px';ov.style.width=r.width+'px';ov.style.height=r.height+'px'})}
 function bindDrag(ov,k){var on=false,ox=0,oy=0;
   ov.addEventListener('pointerdown',function(e){on=true;ov.setPointerCapture(e.pointerId);var r=$(k).getBoundingClientRect();ox=e.clientX-r.left;oy=e.clientY-r.top;e.preventDefault()});
-  ov.addEventListener('pointermove',function(e){if(!on)return;var el=$(k),par=el.offsetParent||stage,pr=par.getBoundingClientRect();
-    var x=e.clientX-ox-pr.left,y=e.clientY-oy-pr.top;x=Math.max(0,Math.min(pr.width-el.offsetWidth,x));y=Math.max(0,Math.min(pr.height-el.offsetHeight,y));
-    el.style.left=x+'px';el.style.top=y+'px';el.style.right='';el.style.bottom='';syncOv()});
+  ov.addEventListener('pointermove',function(e){if(!on)return;var el=$(k),par=el.offsetParent||stage,pr=par.getBoundingClientRect(),sr=stage.getBoundingClientRect();
+    var tx=e.clientX-ox,ty=e.clientY-oy;tx=Math.max(sr.left,Math.min(sr.right-el.offsetWidth,tx));ty=Math.max(sr.top,Math.min(sr.bottom-el.offsetHeight,ty));
+    el.style.left=(tx-pr.left)+'px';el.style.top=(ty-pr.top)+'px';el.style.right='';el.style.bottom='';syncOv()});
   function end(){if(!on)return;on=false;saveLayout()}
   ov.addEventListener('pointerup',end);ov.addEventListener('pointercancel',end)}
 function setEdit(on){layEdit=on;LAYOUT_KEYS.forEach(function(k){var el=$(k);el.style.pointerEvents=on?'none':'';
@@ -1819,7 +1819,7 @@ pausePanel.innerHTML='<div style="background:#2a1a10;color:#fff1d6;border:1px so
   '<button id="pResume" class="btn" style="min-width:0">চালিয়ে যান</button>'+
   '<button id="pCust" class="btn" style="min-width:0;background:linear-gradient(180deg,#ffe066,#f5c400);color:#3a1a05">বাটন কাস্টমাইজ করুন</button></div>';
 custBar.style.cssText='position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:27;display:none;align-items:center;gap:12px;background:#2a1a10;color:#fff1d6;border:1px solid #f5c400;border-radius:14px;padding:8px 14px;font:700 15px var(--body)';
-custBar.innerHTML='<span>বাটন টেনে সাজান</span><button id="custDone" class="btn" style="min-width:0;padding:6px 16px;font-size:16px">সম্পন্ন</button>';
+custBar.innerHTML='<span>বাটন টেনে সাজান</span><button id="custReset" class="btn alt" style="min-width:0;padding:6px 12px;font-size:14px">ডিফল্ট</button><button id="custDone" class="btn" style="min-width:0;padding:6px 16px;font-size:16px">সম্পন্ন</button>';
 cdEl.style.cssText='position:fixed;inset:0;z-index:26;display:none;align-items:center;justify-content:center;font:800 96px var(--display);color:#ffd27a;text-shadow:0 4px 0 #7a3a0a;pointer-events:none;background:rgba(20,10,4,.25)';
 var BODY_EL=document.body||document.documentElement;
 BODY_EL.appendChild(pausePanel);BODY_EL.appendChild(custBar);BODY_EL.appendChild(cdEl);
@@ -1837,6 +1837,7 @@ function endCustomize(){setEdit(false);saveLayout();custBar.style.display='none'
 pausePanel.querySelector('#pResume').addEventListener('click',function(){G.paused=false;pauseUI()});
 pausePanel.querySelector('#pCust').addEventListener('click',function(){startCustomize('pause')});
 custBar.querySelector('#custDone').addEventListener('click',endCustomize);
+custBar.querySelector('#custReset').addEventListener('click',function(){localStorage.removeItem('rcdl_layout');applyLayout();syncOv()});
 $('bCust').addEventListener('click',function(){startCustomize('menu')});
 /* ---------- main loop ---------- */
 var clock=new THREE.Clock(),dustPts=null,sunSprite=null;
