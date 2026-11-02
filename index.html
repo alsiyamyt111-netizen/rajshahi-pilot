@@ -396,6 +396,8 @@ var SUN_DX=-0.97,SUN_DZ=-0.24,SUN_ANG=Math.atan2(SUN_DX,SUN_DZ);
 /* ---------- renderer / scene ---------- */
 var stage=$('stage');
 var renderer=new THREE.WebGLRenderer({canvas:$('gl'),antialias:true,powerPreference:'high-performance'});
+renderer.domElement.addEventListener('webglcontextlost',function(e){e.preventDefault()},false);
+renderer.domElement.addEventListener('webglcontextrestored',function(){location.reload()},false);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75));
 var scene=new THREE.Scene();
 var FOGC=0xf6cf9a;
@@ -1780,7 +1782,7 @@ function update(dt){
   if(zn.id!==G.zone){var first=G.zone<0;G.zone=zn.id;setT('zonechip',zn.name);if(!first&&play){banner(zn);sfx('zone')}else if(first&&play)banner(zn);}
   if(play)G.wt+=dt;var wi=Math.floor(G.wt/1800)%3;
   if(wi!==G.wx){G.wx=wi;toast('আবহাওয়া: '+WX[wi].n);applyWx(wi)}
-  if(play)G.playT=(G.playT||0)+dt;G.night=0.5-0.5*Math.cos(2*Math.PI*((G.playT||0)%180)/180);hemiL.intensity=1.05*(1-.55*G.night);sunL.intensity=1.25*(1-.7*G.night);EM_LAMP.emissive.setRGB(.25+.6*G.night,.17+.5*G.night,.06+.25*G.night);BFLY.emissive.setRGB(.05+.5*G.night,.02+.25*G.night,.12+.35*G.night);nightOv.style.opacity=play?(G.night*.3).toFixed(3):'0';if(LAMP_POOL)LAMP_POOL.opacity=play?G.night*.9:0;headL.position.set(G.x,1.1,-1.2);headT.position.set(G.x,0,-16);headL.intensity=play?G.night*2.2:0;var NB=G.night>.5;if(play&&NB!==!!G.nightB){G.nightB=NB;toast(NB?'🌙 রাত নামছে — রাস্তার বাতি জ্বলছে':'☀️ সকাল হলো')}
+  if(play)G.playT=(G.playT||0)+dt;G.night=0.5-0.5*Math.cos(2*Math.PI*((G.playT||0)%180)/180);hemiL.intensity=1.05*(1-.2*G.night);sunL.intensity=1.25*(1-.4*G.night);EM_LAMP.emissive.setRGB(.25+.6*G.night,.17+.5*G.night,.06+.25*G.night);BFLY.emissive.setRGB(.05+.5*G.night,.02+.25*G.night,.12+.35*G.night);nightOv.style.opacity=play?(G.night*.12).toFixed(3):'0';if(LAMP_POOL)LAMP_POOL.opacity=play?G.night*.9:0;headL.position.set(G.x,1.1,-1.2);headT.position.set(G.x,0,-16);headL.intensity=play?G.night*4:0;var NB=G.night>.5;if(play&&NB!==!!G.nightB){G.nightB=NB;toast(NB?'🌙 রাত নামছে — রাস্তার বাতি জ্বলছে':'☀️ সকাল হলো')}
 var W=WX[G.wx],fg=scene.fog,wk=Math.min(1,dt*.4);fg.near+=(W.fn-fg.near)*wk;fg.far+=(W.ff-fg.far)*wk;fg.color.lerp(WCOL[G.wx].clone().lerp(NIGHT_FOG,G.night),wk);
   var ws=Math.floor(G.wt);if(ws!==G.wtS){G.wtS=ws;var rm=1800-(ws%1800);$('wxc').textContent=W.ic+' '+W.s+' · '+bd(Math.floor(rm/60))+':'+bd(('0'+rm%60).slice(-2))}
   if(G.crowd>0){G.crowd-=dt;var mu=1-G.crowd/2.8;mob.forEach(function(m){var r=7*(1-mu)+1.4;m.position.set(G.x+m.userData.ax*r,Math.abs(Math.sin(G.t*14+m.userData.ax*5))*.15,m.userData.az*r);m.rotation.y=Math.atan2(-m.userData.ax,-m.userData.az)});if(G.crowd<=0)endGame()}
@@ -1884,7 +1886,7 @@ var W=WX[G.wx],fg=scene.fog,wk=Math.min(1,dt*.4);fg.near+=(W.fn-fg.near)*wk;fg.f
 }
 function loop(){
   requestAnimationFrame(loop);
-  var dt=Math.min(clock.getDelta(),.05);
+  var dt=Math.min(clock.getDelta(),.05);if(!isFinite(dt))dt=0;if(!isFinite(G.playT))G.playT=0;if(!isFinite(G.night))G.night=0;if(!isFinite(hemiL.intensity))hemiL.intensity=1;if(!isFinite(sunL.intensity))sunL.intensity=1.25;if(!isFinite(headL.intensity))headL.intensity=0;
   if(!G.paused)update(dt);
   renderer.render(scene,camera);
 }
@@ -1930,7 +1932,7 @@ var IC_PAUSE='<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" r
 $('bPause').innerHTML=IC_PAUSE;
 function togglePause(){if(G.mode!=='play')return;G.paused=!G.paused;$('bPause').innerHTML=G.paused?IC_PLAY:IC_PAUSE;}
 $('bPause').addEventListener('click',togglePause);$('bGear').addEventListener('click',toggleGear);$('bMango').addEventListener('click',function(){if(!mangoFly())toast('আম নেই!',true)});
-document.addEventListener('visibilitychange',function(){if(document.hidden&&G.mode==='play'&&!G.paused)togglePause()});
+document.addEventListener('visibilitychange',function(){if(document.hidden&&G.mode==='play'&&!G.paused)togglePause();if(!document.hidden)resize()});
 KEYS.forEach(function(k){
   $('v-'+k).querySelector('input').addEventListener('change',function(){
     if(!U){amsg('আগে লগ ইন করুন');selCard(G.veh);return}
