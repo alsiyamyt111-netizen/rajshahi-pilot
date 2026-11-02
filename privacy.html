@@ -30,7 +30,7 @@
   <div>
     <h1 data-l="bn">গোপনীয়তা নীতি</h1>
     <h1 data-l="en">Privacy Policy</h1>
-    <div class="meta"><span data-l="bn">রাজশাহীর পাইলট · সর্বশেষ আপডেট: ১ নভেম্বর ২০২৬</span><span data-l="en">Rajshahi Pilot · Last updated: 1 November 2026</span></div>
+    <div class="meta"><span data-l="bn">রাজশাহীর পাইলট · সর্বশেষ আপডেট: ২ নভেম্বর ২০২৬</span><span data-l="en">Rajshahi Pilot · Last updated: 2 November 2026</span></div>
   </div>
   <div class="lang">
     <button id="bBn" class="on" type="button">বাংলা</button>
@@ -41,52 +41,78 @@
 <section data-l="bn">
 <h2>১. ভূমিকা</h2>
 <p>"রাজশাহীর পাইলট" একটি ব্রাউজার-ভিত্তিক খেলা। এই নীতিতে বলা আছে কোন তথ্য সংগ্রহ হয়, কেন হয়, কোথায় থাকে এবং আপনি কী করতে পারেন।</p>
+
 <h2>২. কোন তথ্য সংগ্রহ হয়</h2>
 <ul>
 <li><b>অ্যাকাউন্টের তথ্য:</b> ইমেইল ঠিকানা ও পাসওয়ার্ড (ইমেইল দিয়ে সাইন-আপ করলে), অথবা গুগল দিয়ে লগইন করলে আপনার নাম, ইমেইল ও প্রোফাইল ছবি।</li>
-<li><b>খেলার অগ্রগতি:</b> নাম, খেলার টাকা/কয়েন, কেনা গাড়ি, নির্বাচিত গাড়ি, সেরা স্কোর।</li>
-<li><b>ব্রাউজারে সংরক্ষিত তথ্য:</b> খেলাটি আপনার ফোন বা কম্পিউটারের ব্রাউজারে কিছু ক্যাশ তথ্য রাখে, যাতে দ্রুত চালু হয়।</li>
-<li>খেলায় কোনো বিজ্ঞাপন বা তৃতীয় পক্ষের ট্র্যাকিং ব্যবহার করা হয় না।</li>
+<li><b>খেলার অগ্রগতি:</b> নাম, খেলার টাকা/কয়েন, কেনা গাড়ি, নির্বাচিত গাড়ি ও সেরা স্কোর। বর্তমান খেলার আম, চার্জ ও পয়েন্টের মতো তথ্য আলাদাভাবে সংরক্ষণ হয় না, খেলা শেষ হলে মুছে যায়।</li>
+<li><b>আপনার ডিভাইসে সংরক্ষিত তথ্য (ব্রাউজার স্টোরেজ):</b>
+  <ul>
+    <li><code>rcdl_cache_&lt;আপনার অ্যাকাউন্ট আইডি&gt;</code>: আপনার খেলার তথ্যের একটি অস্থায়ী কপি, যাতে গেম দ্রুত চালু হয়।</li>
+    <li><code>rcdl_layout</code>: আপনার সাজানো কন্ট্রোল বাটনের জায়গা। এটি শুধু আপনার ডিভাইসে থাকে, সার্ভারে যায় না।</li>
+  </ul>
+</li>
+<li>গুগল দিয়ে লগইন করলে আপনার নাম, ইমেইল ও প্রোফাইল ছবি Google Firebase Authentication-এ সংরক্ষিত হয়।</li>
+<li>অ্যাকাউন্ট ও খেলার অগ্রগতি Google Firebase Firestore-এ থাকে।</li>
+<li>এই তথ্য শুধু অ্যাকাউন্ট চালানোর জন্য ব্যবহার হয়।</li>
+<li>খেলায় কোনো বিজ্ঞাপন, বিশ্লেষণ (analytics) বা তৃতীয় পক্ষের ট্র্যাকিং স্ক্রিপ্ট ব্যবহার করা হয় না।</li>
 </ul>
+
 <h2>৩. তথ্য কেন ব্যবহার হয়</h2>
-<p>অ্যাকাউন্টে লগইন করা, খেলার অগ্রগতি সংরক্ষণ করা এবং সেরা স্কোর দেখানোর জন্য এই তথ্য ব্যবহার হয়। অন্য কোনো উদ্দেশ্যে বিক্রি বা শেয়ার করা হয় না।</p>
-<h2>৪. কোথায় তথ্য থাকে</h2>
-<p>অ্যাকাউন্ট ও খেলার তথ্য Google Firebase (Authentication ও Firestore) সেবায় সংরক্ষিত হয়। গেমের ফাইল Netlify-এ হোস্ট করা হয়। এই সেবাগুলোর নিজস্ব গোপনীয়তা নীতিও প্রযোজ্য।</p>
-<h2>৫. তথ্য কতদিন থাকে</h2>
-<p>অ্যাকাউন্ট থাকা পর্যন্ত খেলার তথ্য সংরক্ষিত থাকে। অ্যাকাউন্ট মুছে ফেলার অনুরোধ করলে তথ্য মুছে ফেলা হবে।</p>
-<h2>৬. আপনার অধিকার</h2>
+<p>অ্যাকাউন্টে লগইন করা, খেলার অগ্রগতি সংরক্ষণ করা, সেরা স্কোর দেখানো এবং কন্ট্রোল বাটনের সাজানো বিন্যাস মনে রাখার জন্য এই তথ্য ব্যবহার হয়। অন্য কোনো উদ্দেশ্যে বিক্রি বা শেয়ার করা হয় না।</p>
+
+<h2>৪. তথ্য কতদিন থাকে</h2>
+<p>অ্যাকাউন্ট থাকা পর্যন্ত খেলার তথ্য সংরক্ষিত থাকে। ডিভাইসের ব্রাউজার স্টোরেজ (ক্যাশ ও কন্ট্রোল বিন্যাস) আপনি ব্রাউজারের সাইট-ডেটা মুছে বা সেটিংয়ে "ডিফল্টে ফিরুন" চাপলে মুছে যায়। অ্যাকাউন্ট মুছে ফেলার অনুরোধ করলে সার্ভারে থাকা তথ্যও মুছে ফেলা হবে।</p>
+
+<h2>৫. আপনার অধিকার</h2>
 <p>আপনি যে কোনো সময় আপনার তথ্য দেখতে, সংশোধন করতে বা মুছে ফেলার অনুরোধ করতে পারেন। এজন্য নিচের ইমেইলে যোগাযোগ করুন।</p>
-<h2>৭. শিশু ও গোপনীয়তা</h2>
+
+<h2>৬. শিশু ও গোপনীয়তা</h2>
 <p>অভিভাবকের অনুমতি ছাড়া কোনো শিশুর তথ্য জেনেশুনে সংগ্রহ করা হয় না। কোনো শিশুর তথ্য ভুলবশত দেওয়া হয়েছে মনে হলে জানাবেন, সেটি মুছে ফেলা হবে।</p>
-<h2>৮. পরিবর্তন</h2>
+
+<h2>৭. পরিবর্তন</h2>
 <p>এই নীতি বদলালে এই পাতায় নতুন তারিখ দেওয়া হবে।</p>
-<h2>৯. যোগাযোগ</h2>
+
+<h2>৮. যোগাযোগ</h2>
 <p>ইমেইল: <a href="mailto:alaminislamsiyam999@gmail.com">alaminislamsiyam999@gmail.com</a></p>
 </section>
 
 <section data-l="en">
 <h2>1. Introduction</h2>
 <p>"Rajshahi Pilot" is a browser-based game. This policy explains what information is collected, why, where it is stored, and what choices you have.</p>
+
 <h2>2. Information we collect</h2>
 <ul>
 <li><b>Account information:</b> email address and password (if you sign up with email), or your name, email and profile picture (if you sign in with Google).</li>
-<li><b>Game progress:</b> your name, in-game money/coins, owned vehicles, selected vehicle, and best score.</li>
-<li><b>Data stored in your browser:</b> the game keeps some cached data in your phone or computer browser so it loads quickly.</li>
-<li>The game does not show advertisements or use third-party tracking.</li>
+<li><b>Game progress:</b> your name, in-game money/coins, owned vehicles, selected vehicle, and best score. Values such as mangoes, charge, and points during a run are not saved separately and are cleared when the run ends.</li>
+<li><b>Data stored in your browser (browser storage):</b>
+  <ul>
+    <li><code>rcdl_cache_&lt;your account ID&gt;</code>: a temporary copy of your game progress so the game loads quickly.</li>
+    <li><code>rcdl_layout</code>: the positions of your control buttons. This stays on your device and is not sent to our servers.</li>
+  </ul>
+</li>
+<li>When you sign in with Google, your name, email and profile picture are stored in Google Firebase Authentication.</li>
+<li>Your account and game progress are stored in Google Firebase Firestore.</li>
+<li>This information is used only to run your account.</li>
+<li>The game does not use advertisements, analytics, or third-party tracking scripts.</li>
 </ul>
+
 <h2>3. How we use information</h2>
-<p>We use this information to sign you in, save your game progress, and show your best scores. It is not sold or shared for any other purpose.</p>
-<h2>4. Where information is stored</h2>
-<p>Account and game data are stored with Google Firebase (Authentication and Firestore). The game files are hosted on Netlify. The privacy policies of these services also apply.</p>
-<h2>5. How long information is kept</h2>
-<p>Game data is kept for as long as your account exists. If you ask us to delete your account, your data will be deleted.</p>
-<h2>6. Your rights</h2>
+<p>We use this information to sign you in, save your game progress, show your best scores, and remember how you arranged the control buttons. It is not sold or shared for any other purpose.</p>
+
+<h2>4. How long information is kept</h2>
+<p>Game data is kept for as long as your account exists. Browser storage on your device (cache and control layout) is removed when you clear the site data in your browser, or when you press "Reset to default" in the settings. If you ask us to delete your account, the data on our servers will be deleted too.</p>
+
+<h2>5. Your rights</h2>
 <p>You can ask to view, correct, or delete your information at any time by contacting us at the email below.</p>
-<h2>7. Children</h2>
+
+<h2>6. Children</h2>
 <p>We do not knowingly collect personal information from children without parental permission. If you believe a child has provided information by mistake, please contact us and it will be deleted.</p>
-<h2>8. Changes</h2>
+
+<h2>7. Changes</h2>
 <p>If this policy changes, the date on this page will be updated.</p>
-<h2>9. Contact</h2>
+
+<h2>8. Contact</h2>
 <p>Email: <a href="mailto:alaminislamsiyam999@gmail.com">alaminislamsiyam999@gmail.com</a></p>
 </section>
 </main>
